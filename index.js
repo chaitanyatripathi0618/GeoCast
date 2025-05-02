@@ -2,16 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const UserModel = require('./models/User');
+require('dotenv').config();
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+const mongoUri = process.env.MONGODB_URI;
 
-// MongoDB connection
-mongoose.connect('mongodb+srv://chiragt18dec:tQhAvP0oqUG0gRC0@cluster0.lv8uyti.mongodb.net/weatherApplication?retryWrites=true&w=majority', {
+mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -20,6 +18,10 @@ mongoose.connect('mongodb+srv://chiragt18dec:tQhAvP0oqUG0gRC0@cluster0.lv8uyti.m
   console.error('❌ MongoDB connection error:', err.message);
   process.exit(1);
 });
+
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 // Swagger setup
 const swaggerOptions = {
@@ -138,7 +140,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Optional: Get all users
 /**
  * @swagger
  * /getUser:
